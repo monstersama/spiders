@@ -29,6 +29,7 @@ def get_page(url):
     except RequestException:
         return None
 
+
 def get_info(html):
     '''
     提取电影信息
@@ -46,6 +47,7 @@ def get_info(html):
             'score': re_html.sub('', info[2])
         }
 
+
 def write_to_json(content):
     '''
     将热映电影的信息以保存为json格式的信息
@@ -55,6 +57,7 @@ def write_to_json(content):
     print(type(json.dumps(content)))
     with open('result.txt', 'a', encoding='utf-8') as f:
         f.write(json.dumps(content, ensure_ascii=False) + '\n')
+
 
 def download_image(content):
     '''
@@ -71,13 +74,14 @@ def download_image(content):
     with open(img_name, 'wb+') as f:
         f.write(requests.get(content.get('image')).content)
 
+
 def run(offset):
     '''
     开启翻页
     :param offset: 翻页,一次翻页为30
     :return:
     '''
-    url = "https://maoyan.com/films?showType=1&offset=%s"%offset
+    url = "https://maoyan.com/films?showType=1&offset=%s" % offset
     html = get_page(url)
     print(os.getcwd())
     for i in get_info(html):
@@ -86,9 +90,7 @@ def run(offset):
         write_to_json(i)
 
 
-
 if __name__ == "__main__":
     for page in range(0, 2):
-        run(offset=page*30)
+        run(offset=page * 30)
         time.sleep(1)  # 速度过快会被反爬发现
-
