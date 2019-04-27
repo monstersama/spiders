@@ -6,11 +6,16 @@ import json
 import os
 import requests
 import re
-
+import time
 from requests import RequestException
 
 
 def get_page(url):
+    '''
+    请求页面
+    :param url:
+    :return:
+    '''
     header = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)"
                       " Chrome/73.0.3683.103 Safari/537.36"
@@ -66,8 +71,13 @@ def download_image(content):
     with open(img_name, 'wb+') as f:
         f.write(requests.get(content.get('image')).content)
 
-def run():
-    url = "https://maoyan.com/films?showType=1&offset=0"
+def run(offset):
+    '''
+    开启翻页
+    :param offset: 翻页,一次翻页为30
+    :return:
+    '''
+    url = "https://maoyan.com/films?showType=1&offset=%s"%offset
     html = get_page(url)
     print(os.getcwd())
     for i in get_info(html):
@@ -78,4 +88,7 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    for page in range(0, 2):
+        run(offset=page*30)
+        time.sleep(1)  # 速度过快会被反爬发现
+
