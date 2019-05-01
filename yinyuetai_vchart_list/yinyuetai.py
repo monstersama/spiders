@@ -17,7 +17,7 @@ def get_page(url):
                       " Chrome/73.0.3683.103 Safari/537.36"
     }
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, timeout=30, headers=headers) #对速度做个限制防止反爬
         if response.status_code == 200:
             return response.text
         return "something wrong"
